@@ -37,13 +37,13 @@ namespace MonoCatalog {
 
 		class SectionInfo {
 			public string Title;
-			public Func<UITableView, NSIndexPath, UITableViewCell> Creator;
+			public Type ViewType;
 			public float Height = 50f;
 		}
 
 		static SectionInfo [] Sections = new[]{
-			new SectionInfo { Title = "Simple Paragraphs 2-1",  Creator = SimpleParagraphs },
-			new SectionInfo { Title = "Simple Text Labels 2-2", Creator = SimpleTextLabels },
+			new SectionInfo { Title = "Simple Paragraphs 2-1",  ViewType = typeof (SimpleParagraphsView) },
+			new SectionInfo { Title = "Simple Text Labels 2-2", ViewType = typeof (SimpleTextLabelsView) },
 		};
 
 		class ItemsTableDelegate : UITableViewDelegate
@@ -71,7 +71,8 @@ namespace MonoCatalog {
 
 			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
 			{
-				return Sections [indexPath.Section].Creator (tableView, indexPath);
+				var section = Sections [indexPath.Section];
+				return CoreTextController.GetCell (section.ViewType, tableView, indexPath);
 			}
 
 			public override int RowsInSection (UITableView tableview, int section)
@@ -88,24 +89,27 @@ namespace MonoCatalog {
 			TableView.Delegate      = new ItemsTableDelegate ();
 		}
 
-		static UITableViewCell GetCell<T> (UITableView tableView, NSIndexPath indexPath, string id)
-			where T : UIView, new ()
+		static UITableViewCell GetCell (Type viewType, UITableView tableView, NSIndexPath indexPath)
 		{
 			const int TagMask = 0x0DEDBEEF;
+
+			var id  = Sections [indexPath.Section].Title;
+			var tag = indexPath.Section | TagMask;
 
 			var cell = tableView.DequeueReusableCell (id);
 			if (cell == null) {
 				cell = new UITableViewCell (UITableViewCellStyle.Default, id);
 			}
 			else {
-				RemoveViewWithTag (cell, indexPath.Section | TagMask);
+				RemoveViewWithTag (cell, tag);
 			}
 
-			cell.ContentView.AddSubview (new T () {
-				BackgroundColor = UIColor.Clear,
-				Frame = new RectangleF (5, 5, tableView.Bounds.Width - 30, Sections [indexPath.Section].Height - 10),
-				Tag = indexPath.Section | TagMask,
-			});
+			var view = (UIView) Activator.CreateInstance (viewType);
+			view.BackgroundColor    = UIColor.Clear;
+			view.Frame              = new RectangleF (5, 5, tableView.Bounds.Width - 30, Sections [indexPath.Section].Height - 10);
+			view.Tag                = tag;
+
+			cell.ContentView.AddSubview (view);
 
 			return cell;
 		}
@@ -118,13 +122,7 @@ namespace MonoCatalog {
 				u.RemoveFromSuperview ();
 		}
 
-		static UITableViewCell SimpleParagraphs (UITableView tableView, NSIndexPath indexPath)
-		{
-			return GetCell<SimpleParagraphsView>(tableView, indexPath, SimpleParagraphsView.Identifier);
-		}
-
 		class SimpleParagraphsView : UIView {
-			public const string Identifier = "Simple Paragraphs";
 
 			public override void Draw (RectangleF rect)
 			{
@@ -166,13 +164,7 @@ namespace MonoCatalog {
 			}
 		}
 
-		static UITableViewCell SimpleTextLabels (UITableView tableView, NSIndexPath indexPath)
-		{
-			return GetCell<SimpleTextLabelsView>(tableView, indexPath, SimpleTextLabelsView.Identifier);
-		}
-
 		class SimpleTextLabelsView : UIView {
-			public const string Identifier = "Simple Text Labels";
 
 			public override void Draw (RectangleF rect)
 			{
