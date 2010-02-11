@@ -102,6 +102,7 @@ namespace MonoCatalog {
 			}
 
 			cell.ContentView.AddSubview (new T () {
+				BackgroundColor = UIColor.Clear,
 				Frame = new RectangleF (5, 5, tableView.Bounds.Width - 30, Sections [indexPath.Section].Height - 10),
 				Tag = indexPath.Section | TagMask,
 			});
@@ -124,11 +125,6 @@ namespace MonoCatalog {
 
 		class SimpleParagraphsView : UIView {
 			public const string Identifier = "Simple Paragraphs";
-
-			public SimpleParagraphsView ()
-			{
-				base.BackgroundColor = UIColor.Clear;
-			}
 
 			public override void Draw (RectangleF rect)
 			{
