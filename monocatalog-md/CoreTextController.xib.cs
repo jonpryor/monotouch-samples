@@ -42,8 +42,8 @@ namespace MonoCatalog {
 		}
 
 		static SectionInfo [] Sections = new[]{
-			new SectionInfo { Title = "Simple Paragraphs 2-1", Creator = SimpleParagraphs },
-			// new SectionInfo { Title = "Key/Value Pairs",    Creator = GetKeyValuePairCell },
+			new SectionInfo { Title = "Simple Paragraphs 2-1",  Creator = SimpleParagraphs },
+			new SectionInfo { Title = "Simple Text Labels 2-2", Creator = SimpleTextLabels },
 		};
 
 		class ItemsTableDelegate : UITableViewDelegate
@@ -163,6 +163,27 @@ namespace MonoCatalog {
 						frame.Draw (context);
 					context.ShowText ("hello, world!");
 				}
+			}
+		}
+
+		static UITableViewCell SimpleTextLabels (UITableView tableView, NSIndexPath indexPath)
+		{
+			return GetCell<SimpleTextLabelsView>(tableView, indexPath, SimpleTextLabelsView.Identifier);
+		}
+
+		class SimpleTextLabelsView : UIView {
+			public const string Identifier = "Simple Text Labels";
+
+			public override void Draw (RectangleF rect)
+			{
+				var context = UIGraphics.GetCurrentContext ();
+				context.TextMatrix = CGAffineTransform.MakeScale (1f, -1f);
+				context.TextPosition = new PointF (10f, base.Center.Y);
+				var attrString = new NSAttributedString ("my Arial 20 label!", new CTStringAttributes () {
+			        Font = new CTFont ("Arial", 20f),
+				});
+				using (var line = new CTLine (attrString))
+					line.Draw (context);
 			}
 		}
 	}
