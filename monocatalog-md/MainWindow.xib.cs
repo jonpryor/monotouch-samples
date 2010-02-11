@@ -102,6 +102,7 @@ namespace MonoCatalog {
 				new Sample ("Address Book", new AddressBookController ()),
 				new Sample ("Buttons", new ButtonsViewController ()),
 				new Sample ("Controls", new ControlsViewController ()),
+				new Sample ("CoreText", new CoreTextController ()),
 				new Sample ("Images", new ImagesViewController ()),
 				new Sample ("Mono.Data.Sqlite", new MonoDataSqliteController ()),
 				new Sample ("Pickers", new PickerViewController ()),
