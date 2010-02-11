@@ -44,6 +44,7 @@ namespace MonoCatalog {
 		static SectionInfo [] Sections = new[]{
 			new SectionInfo { Title = "Simple Paragraphs 2-1",  ViewType = typeof (SimpleParagraphsView) },
 			new SectionInfo { Title = "Simple Text Labels 2-2", ViewType = typeof (SimpleTextLabelsView) },
+			new SectionInfo { Title = "Columnar Layout 2-3",    ViewType = typeof (ColumnarLayoutView), Height = 100f },
 		};
 
 		class ItemsTableDelegate : UITableViewDelegate
@@ -176,6 +177,60 @@ namespace MonoCatalog {
 				});
 				using (var line = new CTLine (attrString))
 					line.Draw (context);
+			}
+		}
+
+		class ColumnarLayoutView : UIView {
+
+			const int ColumnCount = 3;
+
+			CGPath[] CreateColumns ()
+			{
+				var bounds = new RectangleF (0, 0, Bounds.Width, Bounds.Height);
+
+				var columnRects = new RectangleF [ColumnCount];
+
+				// Start by setting the first column to cover the entire view
+				columnRects[0] = bounds;
+				// Divide the columns equally across the frame's width.
+				var columnWidth = Bounds.Width / ColumnCount;
+				for (int i = 0; i < columnRects.Length - 1; ++i) {
+					columnRects [i].Divide (columnWidth, CGRectEdge.MinXEdge, out columnRects [i], out columnRects[i+1]);
+				}
+
+				var paths = new CGPath [columnRects.Length];
+				for (int i = 0; i < columnRects.Length; ++i) {
+					paths [i] = new CGPath ();
+					paths [i].AddRect (columnRects[i].Inset (10f, 10f));
+				}
+
+				return paths;
+			}
+
+			public override void Draw (RectangleF rect)
+			{
+				// Initialize a graphics context and set the text matrix to a known value
+				var context = UIGraphics.GetCurrentContext ();
+				context.TextMatrix = CGAffineTransform.MakeScale (1f, -1f);
+
+				var value = "This is the string that will be split across " +
+					ColumnCount + " columns.  This code brought to you by " +
+					"ECMA 334, ECMA 335 and the Mono Team at Novell.";
+
+				var framesetter = new CTFramesetter (new NSAttributedString (value));
+				var paths = CreateColumns ();
+				var startIndex = 0;
+				for (int i = 0; i < paths.Length; ++i) {
+					var path = paths [i];
+
+					// Create a frame for this column and draw it
+					using (var frame = framesetter.GetFrame (new NSRange (startIndex, 0), path, null)) {
+						frame.Draw (context);
+
+						var frameRange = frame.GetVisibleStringRange ();
+						startIndex += frameRange.Length;
+					}
+				}
 			}
 		}
 	}
