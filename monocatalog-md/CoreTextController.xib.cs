@@ -83,6 +83,7 @@ namespace MonoCatalog {
 		public override void ViewDidLoad ()
 		{
 			base.ViewDidLoad ();
+			Title = "CoreText Demos";
 			TableView.DataSource    = new ItemsDataSource ();
 			TableView.Delegate      = new ItemsTableDelegate ();
 		}
