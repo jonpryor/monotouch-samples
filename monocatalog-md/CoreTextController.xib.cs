@@ -42,10 +42,10 @@ namespace MonoCatalog {
 		}
 
 		static SectionInfo [] Sections = new[]{
-			new SectionInfo { Title = "Simple Paragraphs 2-1",  ViewType = typeof (SimpleParagraphsView) },
-			new SectionInfo { Title = "Simple Text Labels 2-2", ViewType = typeof (SimpleTextLabelsView) },
-			new SectionInfo { Title = "Columnar Layout 2-3",    ViewType = typeof (ColumnarLayoutView), Height = 100f },
-			new SectionInfo { Title = "Manual Line Breaking 2-4",   ViewType = typeof (ManualLineBreakingView) },
+			new SectionInfo { Title = "2-1 Simple Paragraphs",  ViewType = typeof (SimpleParagraphsView) },
+			new SectionInfo { Title = "2-2 Simple Text Labels", ViewType = typeof (SimpleTextLabelsView) },
+			new SectionInfo { Title = "2-3 Columnar Layout",    ViewType = typeof (ColumnarLayoutView), Height = 100f },
+			new SectionInfo { Title = "2-4 Manual Line Breaking",   ViewType = typeof (ManualLineBreakingView) },
 		};
 
 		class ItemsTableDelegate : UITableViewDelegate
