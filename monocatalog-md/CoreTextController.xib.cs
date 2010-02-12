@@ -45,6 +45,7 @@ namespace MonoCatalog {
 			new SectionInfo { Title = "Simple Paragraphs 2-1",  ViewType = typeof (SimpleParagraphsView) },
 			new SectionInfo { Title = "Simple Text Labels 2-2", ViewType = typeof (SimpleTextLabelsView) },
 			new SectionInfo { Title = "Columnar Layout 2-3",    ViewType = typeof (ColumnarLayoutView), Height = 100f },
+			new SectionInfo { Title = "Manual Line Breaking 2-4",   ViewType = typeof (ManualLineBreakingView) },
 		};
 
 		class ItemsTableDelegate : UITableViewDelegate
@@ -230,6 +231,44 @@ namespace MonoCatalog {
 						var frameRange = frame.GetVisibleStringRange ();
 						startIndex += frameRange.Length;
 					}
+				}
+			}
+		}
+
+		class ManualLineBreakingView : UIView {
+
+			public override void Draw (RectangleF rect)
+			{
+				// Initialize a graphics context and set the text matrix to a known value
+				var context = UIGraphics.GetCurrentContext ();
+				context.TextMatrix = CGAffineTransform.MakeScale (1f, -1f);
+
+				var attrString = new NSAttributedString ("This is a long string.  You will only see half");
+				var typesetter = new CTTypesetter (attrString);
+
+				// Find a break for line from the beginning of the string to the given width
+				int start = 0;
+				var width = Frame.Width / 2;
+				Console.WriteLine ("# ManualBreak: width={0}", width);
+				width = 125;
+				var count = typesetter.SuggestLineBreak (start, width);
+				Console.WriteLine ("# ManualBreak: count={0}", count);
+
+				// use the character count (to the break) to create the line:
+				using (var line = typesetter.GetLine (new NSRange (start, count))) {
+					// Get the offset needed to center the line:
+					var flush = 0.5f;   // centered
+					var penOffset = line.GetPenOffsetForFlush (flush, Frame.Width);
+					Console.WriteLine ("# ManualBreak: pen offset={0}", penOffset);
+
+					// Move the given text drawing position by the calculated offset and draw
+					var curPosition = context.TextPosition;
+					Console.WriteLine ("# ManualBreak: curPosition.X={0}", curPosition.X);
+					context.TextPosition = new PointF (curPosition.X + (float) penOffset, base.Center.Y);
+					line.Draw (context);
+
+					// move the index beyond the line break; why?
+					start += count;
 				}
 			}
 		}
