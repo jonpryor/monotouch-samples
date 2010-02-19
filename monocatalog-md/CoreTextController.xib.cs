@@ -266,7 +266,7 @@ namespace MonoCatalog {
 					// Move the given text drawing position by the calculated offset and draw
 					var curPosition = context.TextPosition;
 					Console.WriteLine ("# ManualBreak: curPosition.X={0}", curPosition.X);
-					context.TextPosition = new PointF (curPosition.X + (float) penOffset, base.Center.Y);
+					context.TextPosition = new PointF ((float) penOffset, base.Center.Y);
 					line.Draw (context);
 
 					// move the index beyond the line break; why?
