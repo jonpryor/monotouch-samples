@@ -360,6 +360,23 @@ namespace MonoCatalog {
 
 			public override void Draw (RectangleF rect)
 			{
+				var context = UIGraphics.GetCurrentContext ();
+				context.TextMatrix = CGAffineTransform.MakeScale (1f, -1f);
+				context.TextPosition = new PointF (10f, base.Center.Y);
+				var attrString = new NSAttributedString ("This space intentionally blank. See stdout.", new CTStringAttributes () {
+			        Font = new CTFont ("Arial", 8f),
+				});
+				using (var line = new CTLine (attrString)) {
+					// line.Draw (context);
+					// Get the offset needed to center the line:
+					var flush = 0.5f;   // centered
+					var penOffset = line.GetPenOffsetForFlush (flush, Frame.Width);
+
+					// Move the given text drawing position by the calculated offset and draw
+					context.TextPosition = new PointF ((float) penOffset, base.Center.Y);
+					line.Draw (context);
+				}
+
 				FontDescriptorChecks ();
 				FontCollectionChecks ();
 				ParagraphStyleChecks ();
@@ -417,7 +434,7 @@ namespace MonoCatalog {
 					TabStops = new CTTextTab[0],
 					MaximumLineHeight = 1.0f,
 				});
-				Console.WriteLine (" modified CTParagraphStyle: ");
+				Console.WriteLine ("# modified CTParagraphStyle: ");
 				WriteParagraphStyle (s);
 
 				if (s.MaximumLineHeight != 1.0f)
