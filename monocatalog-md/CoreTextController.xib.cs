@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 
 using MonoTouch.CoreGraphics;
 using MonoTouch.CoreText;
@@ -359,18 +360,20 @@ namespace MonoCatalog {
 
 			public override void Draw (RectangleF rect)
 			{
-				try {
-					CTFontDescriptor descriptor = CreateFontDescriptorFromFamilyAndTraits ("Arial", CTFontSymbolicTraits.Italic, 10.0f);
-					var t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.Variation);
-					Write ("variation", t);
-					t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.CascadeList);
-					Write ("CascadeList", t);
-					t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.Features);
-					Write ("Features", t);
-				}
-				catch (Exception e) {
-					Console.WriteLine ("# Extra: error: {0}", e);
-				}
+				FontDescriptorChecks ();
+				FontCollectionChecks ();
+				ParagraphStyleChecks ();
+			}
+
+			static void FontDescriptorChecks ()
+			{
+				CTFontDescriptor descriptor = CreateFontDescriptorFromFamilyAndTraits ("Arial", CTFontSymbolicTraits.Italic, 10.0f);
+				var t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.Variation);
+				Write ("variation", t);
+				t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.CascadeList);
+				Write ("CascadeList", t);
+				t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.Features);
+				Write ("Features", t);
 			}
 
 			static void Write (string desc, NSObject value)
@@ -378,6 +381,67 @@ namespace MonoCatalog {
 				Console.Write ("# Extra Tests: {0}={1}", desc, value);
 				Console.Write ("; Null? {0}; Type={1}", value == null, value == null ? "<none>" : value.GetType().Name);
 				Console.WriteLine ();
+			}
+
+			static void FontCollectionChecks ()
+			{
+				var d = CreateFontDescriptorFromFamilyAndTraits ("Arial", CTFontSymbolicTraits.Italic, 10.0f);
+				var defCollection = new CTFontCollection (new[]{d, d}, null);
+				var defDescriptors = defCollection.GetMatchingFontDescriptors ();
+				if (defDescriptors.Length != 4)
+					throw new InvalidOperationException ("unexpected font descriptor count");
+
+				var noDups = new CTFontCollection (new[]{d, d}, new CTFontCollectionOptions () {
+					RemoveDuplicates = true,
+				});
+				var noDupDescs = noDups.GetMatchingFontDescriptors ();
+
+				if (noDupDescs.Length != 2)
+					throw new InvalidOperationException ("unexpected font descriptor count");
+
+				var withDups = new CTFontCollection (new[]{d, d}, new CTFontCollectionOptions () {
+					RemoveDuplicates = false,
+				});
+				var withDupDescs = withDups.GetMatchingFontDescriptors ();
+				if (withDupDescs.Length != defDescriptors.Length)
+					throw new InvalidOperationException ("unexpected font descriptor count");
+			}
+
+			static void ParagraphStyleChecks ()
+			{
+				var s = new CTParagraphStyle (null);
+				Console.WriteLine ("# default CTParagraphStyle: ");
+				WriteParagraphStyle (s);
+
+				s = new CTParagraphStyle (new CTParagraphStyleSettings () {
+					TabStops = new CTTextTab[0],
+					MaximumLineHeight = 1.0f,
+				});
+				Console.WriteLine (" modified CTParagraphStyle: ");
+				WriteParagraphStyle (s);
+
+				if (s.MaximumLineHeight != 1.0f)
+					throw new InvalidOperationException ("MaximumLineHeight property not set!");
+				if (s.GetTabStops ().Length != 0)
+					throw new InvalidOperationException ("TabStops property not set!");
+			}
+
+			static void WriteParagraphStyle (CTParagraphStyle s)
+			{
+				WriteProperties (s);
+				var ts = s.GetTabStops ();
+				Console.WriteLine ("#\tTabStops: ({0})", ts.Length);
+				foreach (var t in ts) {
+					var o = t.GetOptions ();
+					Console.WriteLine ("#\t\tLocation={0}; TextAlignment={1}; ColumnTerminators={2}", t.Location, t.TextAlignment, o != null ? o.ColumnTerminators.ToString() : "<none>");
+				}
+			}
+
+			static void WriteProperties (object value)
+			{
+				foreach (var p in value.GetType().GetProperties ().OrderBy(p => p.Name)) {
+					Console.WriteLine ("#\t{0}={1}", p.Name, p.GetValue (value, null));
+				}
 			}
 		}
 	}
