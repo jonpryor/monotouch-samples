@@ -46,6 +46,7 @@ namespace MonoCatalog {
 			new SectionInfo { Title = "2-2 Simple Text Labels", ViewType = typeof (SimpleTextLabelsView) },
 			new SectionInfo { Title = "2-3 Columnar Layout",    ViewType = typeof (ColumnarLayoutView), Height = 100f },
 			new SectionInfo { Title = "2-4 Manual Line Breaking",   ViewType = typeof (ManualLineBreakingView) },
+			new SectionInfo { Title = "Extra tests",            ViewType = typeof (ExtraTestsView) },
 		};
 
 		class ItemsTableDelegate : UITableViewDelegate
@@ -270,6 +271,113 @@ namespace MonoCatalog {
 					// move the index beyond the line break; why?
 					start += count;
 				}
+			}
+		}
+
+		// Listing 2-5
+		static CTFontDescriptor CreateFontDescriptorFromName (string postScriptName, float size)
+		{
+			return new CTFontDescriptor (postScriptName, size);
+		}
+
+		// Listing 2-6
+		static CTFontDescriptor CreateFontDescriptorFromFamilyAndTraits (string familyName, CTFontSymbolicTraits traits, float size)
+		{
+			return new CTFontDescriptor (new CTFontDescriptorAttributes () {
+				FamilyName  = familyName,
+				Size        = size,
+				Traits      = new CTFontTraits () {
+					SymbolicTraits = traits,
+				},
+			});
+		}
+
+		// Listing 2-7
+		static CTFont CreateFont (CTFontDescriptor fontDescriptor, float size)
+		{
+			return new CTFont (fontDescriptor, size);
+		}
+
+		// Listing 2-8
+		static NSData CreateFlattenedFontData (CTFont font)
+		{
+			var descriptor = font.GetFontDescriptor ();
+			if (descriptor == null)
+				return null;
+			var attributes = descriptor.GetAttributes ();
+			if (attributes == null)
+				return null;
+			// TODO: MonoTouch has no binding for CFPropertyListIsValid()
+			return null;
+		}
+
+		// Listing 2-9: TODO
+
+		// Listing 2-10:
+		static float GetLineHeightForFont (CTFont font)
+		{
+			return font.AscentMetric + font.DescentMetric + font.LeadingMetric;
+		}
+
+		// Listing 2-11:
+		static void GetGlyphsForCharacters (CTFont font, string value)
+		{
+			var count = value.Length;
+			var characters = value.ToCharArray ();
+			var glyphs = new ushort [characters.Length];
+
+			font.GetGlyphsForCharacters (characters, glyphs);
+
+			// Do something with the glyphs here, if a character is unmapped
+		}
+
+		// Listing 2-12:
+		static CTFont CreateBoldFont (CTFont font, bool makeBold)
+		{
+			var desiredTrait = CTFontSymbolicTraits.None;
+			if (makeBold)
+				desiredTrait = CTFontSymbolicTraits.Bold;
+
+			// Mask off the bold trait to indicate that it is the only trait
+			// desired to be modified.  As CTFontSymbolicTraits is a bit field,
+			// we could chooose to change multiple traits if desired.
+			var traitMask = CTFontSymbolicTraits.Bold;
+
+			// Create a copy of the original font with the masked trait set to the
+			// desired value.  If the font family does not have the appropriate style,
+			// This will return null.
+			return font.WithSymbolicTraits (0.0f, desiredTrait, traitMask);
+		}
+
+		// Listing 2-13:
+		static CTFont CreateFontConvertedToFamily (CTFont font, string family)
+		{
+			return font.WithFamily (0.0f, family);
+		}
+
+		class ExtraTestsView : UIView {
+
+			public override void Draw (RectangleF rect)
+			{
+				try {
+					CTFontDescriptor descriptor = CreateFontDescriptorFromFamilyAndTraits ("Arial", CTFontSymbolicTraits.Italic, 10.0f);
+					var t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.Variation);
+					Write ("variation", t);
+					t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.CascadeList);
+					Write ("CascadeList", t);
+					t = descriptor.GetAttribute (CTFontDescriptorAttributeKey.Features);
+					Write ("Features", t);
+				}
+				catch (Exception e) {
+					Console.WriteLine ("# Extra: error: {0}", e);
+				}
+			}
+
+			static void Write (string desc, NSObject value)
+			{
+				Console.Write ("# Extra Tests: {0}={1}", desc, value);
+				Console.Write ("; Null? {0}; Type={1}", value == null, value == null ? "<none>" : value.GetType().Name);
+				Console.WriteLine ();
 			}
 		}
 	}
