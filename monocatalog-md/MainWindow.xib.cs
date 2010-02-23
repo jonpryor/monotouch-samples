@@ -4,10 +4,12 @@
 using System;
 using System.Collections.Generic;
 using System.Collections;
+using System.IO;
 
 //
 // Import the MonoTouch namespaces
 //
+using MonoTouch;
 using MonoTouch.CoreGraphics;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
@@ -97,12 +99,16 @@ namespace MonoCatalog {
 		{
 			base.ViewDidLoad ();
 			Title = "MonoTouch UICatalog";
-			samples = new Sample [] {
+			var s = new List<Sample> {
 				new Sample ("Alerts", new AlertsViewController ()),
 				new Sample ("Address Book", new AddressBookController ()),
 				new Sample ("Buttons", new ButtonsViewController ()),
 				new Sample ("Controls", new ControlsViewController ()),
-				new Sample ("CoreText", new CoreTextController ()),
+			};
+			if (File.Exists (Constants.CoreTextLibrary)) {
+				s.Add (new Sample ("CoreText", new CoreTextController ()));
+			}
+			s.AddRange (new[]{
 				new Sample ("Images", new ImagesViewController ()),
 				new Sample ("Mono.Data.Sqlite", new MonoDataSqliteController ()),
 				new Sample ("Pickers", new PickerViewController ()),
@@ -113,7 +119,8 @@ namespace MonoCatalog {
 				new Sample ("Toolbar", new ToolbarViewController ()),
 				new Sample ("Transitions", new TransitionViewController ()),
 				new Sample ("Web", new WebViewController ())
-			};
+			});
+			samples = s.ToArray ();
 
 			TableView.Delegate = new TableDelegate (this);
 			TableView.DataSource = new DataSource (this);

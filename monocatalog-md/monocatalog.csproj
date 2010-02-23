@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <BundleIcon>images\Icon.png</BundleIcon>
     <RootNamespace>MonoCatalog</RootNamespace>
-    <MtouchSdkVersion>3.2</MtouchSdkVersion>
+    <MtouchSdkVersion>3.0</MtouchSdkVersion>
     <BundleIdentifier>com.novell.monocatalog</BundleIdentifier>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
