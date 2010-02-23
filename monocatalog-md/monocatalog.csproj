@@ -217,4 +217,7 @@
     <Content Include="images\whiteButton.png" />
     <Content Include="images\yellowslide.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Info.plist" />
+  </ItemGroup>
 </Project>
