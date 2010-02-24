@@ -11,38 +11,15 @@ using MonoTouch.UIKit;
 
 namespace MonoCatalog {
 
-	public partial class CoreTextController : UITableViewController
+	public partial class CoreTextDemo
 	{
-		// The IntPtr and NSCoder constructors are required for controllers that need
-		// to be able to be created from a xib rather than from managed code
-
-		public CoreTextController (IntPtr handle) : base(handle)
-		{
-			Initialize ();
-		}
-
-		[Export("initWithCoder:")]
-		public CoreTextController (NSCoder coder) : base(coder)
-		{
-			Initialize ();
-		}
-
-		public CoreTextController () : base ("CoreTextController", null)
-		{
-			Initialize ();
-		}
-
-		void Initialize ()
-		{
-		}
-
-		class SectionInfo {
+		public class SectionInfo {
 			public string Title;
 			public Type ViewType;
 			public float Height = 50f;
 		}
 
-		static SectionInfo [] Sections = new[]{
+		public static SectionInfo [] Sections = new[]{
 			new SectionInfo { Title = "2-1 Simple Paragraphs",  ViewType = typeof (SimpleParagraphsView) },
 			new SectionInfo { Title = "2-2 Simple Text Labels", ViewType = typeof (SimpleTextLabelsView) },
 			new SectionInfo { Title = "2-3 Columnar Layout",    ViewType = typeof (ColumnarLayoutView), Height = 100f },
@@ -50,7 +27,7 @@ namespace MonoCatalog {
 			new SectionInfo { Title = "Extra tests",            ViewType = typeof (ExtraTestsView) },
 		};
 
-		class ItemsTableDelegate : UITableViewDelegate
+		public class ItemsTableDelegate : UITableViewDelegate
 		{
 			//
 			// Override to provide the sizing of the rows in our table
@@ -61,7 +38,7 @@ namespace MonoCatalog {
 			}
 		}
 
-		class ItemsDataSource : UITableViewDataSource {
+		public class ItemsDataSource : UITableViewDataSource {
 
 			public override int NumberOfSections (UITableView tableView)
 			{
@@ -76,21 +53,13 @@ namespace MonoCatalog {
 			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
 			{
 				var section = Sections [indexPath.Section];
-				return CoreTextController.GetCell (section.ViewType, tableView, indexPath);
+				return CoreTextDemo.GetCell (section.ViewType, tableView, indexPath);
 			}
 
 			public override int RowsInSection (UITableView tableview, int section)
 			{
 				return 1;
 			}
-		}
-
-		public override void ViewDidLoad ()
-		{
-			base.ViewDidLoad ();
-			Title = "CoreText Demos";
-			TableView.DataSource    = new ItemsDataSource ();
-			TableView.Delegate      = new ItemsTableDelegate ();
 		}
 
 		static UITableViewCell GetCell (Type viewType, UITableView tableView, NSIndexPath indexPath)
