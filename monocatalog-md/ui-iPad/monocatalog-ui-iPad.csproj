@@ -27,7 +27,7 @@
     <MtouchI18n />
     <CustomCommands>
       <CustomCommands>
-        <Command type="AfterBuild" command="sh -c 'for f in *.xib ; do ibtool $f --compile ${TargetDir}/monocatalog.app/`basename $f .xib`.nib; done'" workingdir="${ProjectDir}" />
+        <Command type="AfterBuild" command="sh -c 'mkdir -p ${TargetDir}/monocatalog.app; for f in *.xib ; do ibtool $f --compile ${TargetDir}/monocatalog.app/`basename $f .xib`.nib; done'" workingdir="${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
   </PropertyGroup>
