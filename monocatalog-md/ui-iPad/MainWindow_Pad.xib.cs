@@ -43,7 +43,6 @@ namespace MonoCatalog.iPad
 		public DetailViewController (IntPtr handle)
 			: base(handle)
 		{
-			Console.WriteLine ("# DetailViewController created: NavigationBar? {0}", NavigationBar != null);
 		}
 
 		public UINavigationBar NavigationBar {
@@ -60,18 +59,12 @@ namespace MonoCatalog.iPad
 		UIView detailItem;
 		public void SetDetailItem (UIView detailItem, string title)
 		{
-			Console.WriteLine ("# SetDetailItem: NavigationBar? {0}", NavigationBar != null);
 			if (this.detailItem != detailItem) {
 				if (this.detailItem != null)
 					this.detailItem.RemoveFromSuperview ();
 				this.detailItem = detailItem;
-				Console.WriteLine ("# SetDetailItem: detailItem? {0}; NavigationController? {1}; ParentViewController? {2}",
-					detailItem != null, NavigationController != null, ParentViewController != null);
-				// NavigationController.PresentModalViewController (detailItem, true);
 				content.Add (detailItem);
 				NavigationBar.TopItem.Title = title;
-				// navigationBar.TopItem.Title = detailItem.Title;
-				// navigationBar?
 			}
 			if (SplitViewDelegate.PopoverController != null)
 				SplitViewDelegate.PopoverController.Dismiss (true);
@@ -83,7 +76,6 @@ namespace MonoCatalog.iPad
 		public RootViewController (IntPtr handle)
 			: base (handle)
 		{
-			Console.WriteLine ("RootViewController created!");
 		}
 
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
@@ -213,11 +205,11 @@ namespace MonoCatalog.iPad
 
 		public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
 		{
-			Console.WriteLine ("# iPad SplitViewAppDelegate: finished launching!");
 			detailViewController.SplitViewDelegate = new SplitViewControllerDelegate () {
 				DetailViewController = detailViewController,
 			};
 			splitViewController.Delegate = detailViewController.SplitViewDelegate;
+
 			// Add the split view controller's view to the window and display.
 			window.AddSubview (splitViewController.View);
 			window.MakeKeyAndVisible ();
@@ -234,7 +226,6 @@ namespace MonoCatalog.iPad
 
 		public override void WillHideViewController (UISplitViewController svc, UIViewController aViewController, UIBarButtonItem barButtonItem, UIPopoverController pc)
 		{
-			Console.WriteLine ("# OnFoo...");
 			barButtonItem.Title = "Demos";
 			if (DetailViewController.NavigationBar != null)
 				DetailViewController.NavigationBar.TopItem.SetLeftBarButtonItem (barButtonItem, true);
@@ -243,7 +234,6 @@ namespace MonoCatalog.iPad
 
 		public override void WillShowViewController (UISplitViewController svc, UIViewController aViewController, UIBarButtonItem button)
 		{
-			Console.WriteLine ("# OnBar...");
 			if (DetailViewController.NavigationBar != null)
 				DetailViewController.NavigationBar.TopItem.SetLeftBarButtonItem (null, true);
 			PopoverController = null;
