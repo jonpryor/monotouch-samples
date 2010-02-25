@@ -38,28 +38,42 @@ namespace MonoCatalog.iPad
 		#endregion
 	}
 
-	partial class DetailViewController : UIViewController {
+	partial class ContentViewController : UIViewController {
+		public ContentViewController (IntPtr handle)
+			: base (handle)
+		{
+		}
 
-		UIView detailItem;
-		UIPopoverController popoverController;
+		internal SplitViewControllerDelegate SplitViewDelegate;
+
+		UIViewController detailItem;
+		public void SetDetailItem (UIViewController detailItem)
+		{
+			if (this.detailItem != detailItem) {
+				this.detailItem = detailItem;
+				Console.WriteLine ("# SetDetailItem: detailItem? {0}; NavigationController? {1}; ParentViewController? {2}",
+					detailItem != null, NavigationController != null, ParentViewController != null);
+				// NavigationController.PresentModalViewController (detailItem, true);
+				NavigationController.PushViewController (detailItem, true);
+				// navigationBar.TopItem.Title = detailItem.Title;
+				// navigationBar?
+			}
+			if (SplitViewDelegate.popoverController != null)
+				SplitViewDelegate.popoverController.Dismiss (true);
+		}
+	}
+
+	partial class DetailViewController : UINavigationController {
 
 		public DetailViewController (IntPtr handle)
 			: base(handle)
 		{
 		}
 
-
-		void SetDetailItem (UIView newDetailItem)
+		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
-			if (detailItem != newDetailItem) {
-				detailItem = newDetailItem;
-				navigationBar.TopItem.Title = "Insert title here!";
-			}
-			if (popoverController != null)
-				popoverController.Dismiss (true);
+			return true;
 		}
-
-		// TODO: UIPopoverControllerDelegate, UISplitViewControllerDelegate
 	}
 
 	partial class RootViewController : UITableViewController {
@@ -67,6 +81,7 @@ namespace MonoCatalog.iPad
 		public RootViewController (IntPtr handle)
 			: base (handle)
 		{
+			Console.WriteLine ("RootViewController created!");
 		}
 
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
@@ -77,6 +92,116 @@ namespace MonoCatalog.iPad
 		public override SizeF ContentSizeForViewInPopover {
 			get {return new SizeF (320f, 600f);}
 			set {/* ignore */}
+		}
+
+		static NSString kCellIdentifier = new NSString ("MyIdentifier");
+
+		struct Sample {
+			public string Title;
+			public UIViewController Controller;
+
+			public Sample (string title, UIViewController controller)
+			{
+				Title = title;
+				Controller = controller;
+			}
+		}
+
+		Sample [] samples;
+
+		//
+		// The data source for our TableView
+		//
+		class DataSource : UITableViewDataSource {
+			RootViewController mvc;
+
+			public DataSource (RootViewController mvc)
+			{
+				this.mvc = mvc;
+			}
+
+			public override int RowsInSection (UITableView tableView, int section)
+			{
+				return mvc.samples.Length;
+			}
+
+			public override UITableViewCell GetCell (UITableView tableView, NSIndexPath indexPath)
+			{
+				var cell = tableView.DequeueReusableCell (kCellIdentifier);
+				if (cell == null){
+					cell = new UITableViewCell (UITableViewCellStyle.Default, kCellIdentifier);
+					cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
+				}
+				cell.TextLabel.Text = mvc.samples [indexPath.Row].Title;
+				return cell;
+			}
+		}
+	
+		//
+		// This class receives notifications that happen on the UITableView
+		//
+		class TableDelegate : UITableViewDelegate {
+			RootViewController mvc;
+			
+			public TableDelegate (RootViewController mvc)
+			{
+				this.mvc = mvc;
+			}
+			
+			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
+			{
+				Console.WriteLine ("MonoCatalog: Row selected {0}", indexPath.Row);
+				
+				var cont = mvc.samples [indexPath.Row].Controller;
+				Console.WriteLine ("# RowSel; nav-bar? {0}", mvc.detailViewController.NavigationController != null);
+				mvc.detailViewController.PresentModalViewController (cont, true);
+				// mvc.detailViewController.ParentViewController.PresentModalViewController (cont, true);
+				// mvc.contentViewController.SetDetailItem (cont);
+				// mvc.NavigationController.PushViewController (cont, true);
+			}
+		}
+		
+		public override void ViewDidLoad ()
+		{
+			var c = UIScreen.MainScreen;
+			Console.WriteLine ("# screen modes:");
+			foreach (var m in c.AvailableModes) {
+				Console.WriteLine ("#  Width={0}; Height={1}", m.Size.Width, m.Size.Height);
+			}
+			Console.WriteLine ("# screen bounds: X={0}; Y={1}; Width={2}; Height={3}",
+					c.Bounds.X, c.Bounds.Y, c.Bounds.Width, c.Bounds.Height);
+			base.ViewDidLoad ();
+			Title = "MonoTouch UICatalog";
+			var s = new List<Sample> {
+				// new Sample ("Alerts", new AlertsViewController ()),
+				// new Sample ("Address Book", new AddressBookController ()),
+				// new Sample ("Buttons", new ButtonsViewController ()),
+				// new Sample ("Controls", new ControlsViewController ()),
+			};
+			// FIXME: what about iPhoneOS 3.3, etc.?
+			if (UIDevice.CurrentDevice.SystemVersion.StartsWith ("3.2")) {
+				s.Add (new Sample ("CoreText", new CoreTextController_Pad ()));
+			}
+			#if TODO
+			s.AddRange (new[]{
+				new Sample ("Images", new ImagesViewController ()),
+				new Sample ("Mono.Data.Sqlite", new MonoDataSqliteController ()),
+				new Sample ("Pickers", new PickerViewController ()),
+				new Sample ("Segments", new SegmentViewController ()),
+				new Sample ("Searchbar", new SearchBarController ()),
+				new Sample ("TextField", new TextFieldController ()),
+				new Sample ("TextView", new TextViewController ()),
+				new Sample ("Toolbar", new ToolbarViewController ()),
+				new Sample ("Transitions", new TransitionViewController ()),
+				new Sample ("Web", new WebViewController ())
+			});
+			#endif
+			samples = s.ToArray ();
+
+			TableView.Delegate = new TableDelegate (this);
+			TableView.DataSource = new DataSource (this);
+	
+			NavigationItem.BackBarButtonItem = new UIBarButtonItem () { Title = "Back" };
 		}
 
 	}
@@ -90,11 +215,40 @@ namespace MonoCatalog.iPad
 
 		public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
 		{
+			Console.WriteLine ("# iPad SplitViewAppDelegate: finished launching!");
+			#if false
+			detailViewController.SplitViewDelegate = new SplitViewControllerDelegate () {
+				// NavigationBar = detailNavigationBar,
+			};
+			#endif
+			splitViewController.Delegate = new SplitViewControllerDelegate ();
 			// Add the split view controller's view to the window and display.
 			window.AddSubview (splitViewController.View);
 			window.MakeKeyAndVisible ();
 
 			return true;
+		}
+	}
+
+	class SplitViewControllerDelegate : UISplitViewControllerDelegate {
+
+		internal UIPopoverController popoverController;
+
+		public UINavigationBar NavigationBar {get; set;}
+
+		public override void WillHideViewController (UISplitViewController svc, UIViewController aViewController, UIBarButtonItem barButtonItem, UIPopoverController pc)
+		{
+			Console.WriteLine ("# OnFoo...");
+			barButtonItem.Title = "Root List";
+			// NavigationBar.TopItem.SetLeftBarButtonItem (barButtonItem, true);
+			popoverController = pc;
+		}
+
+		public override void WillShowViewController (UISplitViewController svc, UIViewController aViewController, UIBarButtonItem button)
+		{
+			Console.WriteLine ("# OnBar...");
+			// NavigationBar.TopItem.SetLeftBarButtonItem (null, true);
+			popoverController = null;
 		}
 	}
 }
