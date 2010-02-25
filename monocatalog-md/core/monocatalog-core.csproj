@@ -71,5 +71,6 @@
   </ProjectExtensions>
   <ItemGroup>
     <Compile Include="CoreTextDemo.cs" />
+    <Compile Include="AlertsViewDemo.cs" />
   </ItemGroup>
 </Project>
