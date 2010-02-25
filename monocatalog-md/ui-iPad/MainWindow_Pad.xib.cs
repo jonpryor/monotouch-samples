@@ -163,7 +163,7 @@ namespace MonoCatalog.iPad
 			base.ViewDidLoad ();
 			Title = "MonoTouch UICatalog";
 			var s = new List<Sample> {
-				// new Sample ("Alerts", new AlertsViewController ()),
+				new Sample ("Alerts", new AlertsViewController_Pad ()),
 				// new Sample ("Address Book", new AddressBookController ()),
 				// new Sample ("Buttons", new ButtonsViewController ()),
 				// new Sample ("Controls", new ControlsViewController ()),

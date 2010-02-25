@@ -85,11 +85,18 @@
     <Compile Include="DetailView.xib.designer.cs">
       <DependentUpon>DetailView.xib</DependentUpon>
     </Compile>
+    <Compile Include="AlertsViewController_Pad.xib.cs">
+      <DependentUpon>AlertsViewController_Pad.xib</DependentUpon>
+    </Compile>
+    <Compile Include="AlertsViewController_Pad.xib.designer.cs">
+      <DependentUpon>AlertsViewController_Pad.xib</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="CoreTextController_Pad.xib" />
     <Page Include="MainWindow_Pad.xib" />
     <Page Include="DetailView.xib" />
+    <Page Include="AlertsViewController_Pad.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
