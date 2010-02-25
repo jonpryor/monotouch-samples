@@ -15,46 +15,18 @@ namespace MonoCatalog.iPad {
 	[MonoTouch.Foundation.Register("CoreTextController_Pad")]
 	public partial class CoreTextController_Pad {
 		
-		private MonoTouch.UIKit.UINavigationBar __mt_navigationBar;
-		
-		private MonoTouch.UIKit.UIView __mt_view;
-		
-		private MonoTouch.UIKit.UITableView __mt_tableView;
+		private MonoTouch.UIKit.UITableView __mt_view;
 		
 		#pragma warning disable 0169
-		[MonoTouch.Foundation.Connect("navigationBar")]
-		private MonoTouch.UIKit.UINavigationBar navigationBar {
-			get {
-				this.__mt_navigationBar = ((MonoTouch.UIKit.UINavigationBar)(this.GetNativeField("navigationBar")));
-				return this.__mt_navigationBar;
-			}
-			set {
-				this.__mt_navigationBar = value;
-				this.SetNativeField("navigationBar", value);
-			}
-		}
-		
 		[MonoTouch.Foundation.Connect("view")]
-		private MonoTouch.UIKit.UIView view {
+		private MonoTouch.UIKit.UITableView view {
 			get {
-				this.__mt_view = ((MonoTouch.UIKit.UIView)(this.GetNativeField("view")));
+				this.__mt_view = ((MonoTouch.UIKit.UITableView)(this.GetNativeField("view")));
 				return this.__mt_view;
 			}
 			set {
 				this.__mt_view = value;
 				this.SetNativeField("view", value);
-			}
-		}
-		
-		[MonoTouch.Foundation.Connect("tableView")]
-		private MonoTouch.UIKit.UITableView tableView {
-			get {
-				this.__mt_tableView = ((MonoTouch.UIKit.UITableView)(this.GetNativeField("tableView")));
-				return this.__mt_tableView;
-			}
-			set {
-				this.__mt_tableView = value;
-				this.SetNativeField("tableView", value);
 			}
 		}
 	}

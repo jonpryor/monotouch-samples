@@ -82,10 +82,14 @@
       <DependentUpon>MainWindow_Pad.xib</DependentUpon>
     </Compile>
     <Compile Include="UI.cs" />
+    <Compile Include="DetailView.xib.designer.cs">
+      <DependentUpon>DetailView.xib</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="CoreTextController_Pad.xib" />
     <Page Include="MainWindow_Pad.xib" />
+    <Page Include="DetailView.xib" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>

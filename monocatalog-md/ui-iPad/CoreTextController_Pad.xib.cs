@@ -11,7 +11,7 @@ using MonoTouch.UIKit;
 
 namespace MonoCatalog.iPad {
 
-	public partial class CoreTextController_Pad : UIViewController
+	public partial class CoreTextController_Pad : UITableViewController
 	{
 		// The IntPtr and NSCoder constructors are required for controllers that need
 		// to be able to be created from a xib rather than from managed code
@@ -40,8 +40,8 @@ namespace MonoCatalog.iPad {
 		{
 			base.ViewDidLoad ();
 			Title = "CoreText Demos";
-			tableView.DataSource    = new CoreTextDemo.ItemsDataSource ();
-			tableView.Delegate      = new CoreTextDemo.ItemsTableDelegate ();
+			TableView.DataSource    = new CoreTextDemo.ItemsDataSource ();
+			TableView.Delegate      = new CoreTextDemo.ItemsTableDelegate ();
 		}
 	}
 }

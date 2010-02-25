@@ -38,41 +38,43 @@ namespace MonoCatalog.iPad
 		#endregion
 	}
 
-	partial class ContentViewController : UIViewController {
-		public ContentViewController (IntPtr handle)
-			: base (handle)
-		{
-		}
-
-		internal SplitViewControllerDelegate SplitViewDelegate;
-
-		UIViewController detailItem;
-		public void SetDetailItem (UIViewController detailItem)
-		{
-			if (this.detailItem != detailItem) {
-				this.detailItem = detailItem;
-				Console.WriteLine ("# SetDetailItem: detailItem? {0}; NavigationController? {1}; ParentViewController? {2}",
-					detailItem != null, NavigationController != null, ParentViewController != null);
-				// NavigationController.PresentModalViewController (detailItem, true);
-				NavigationController.PushViewController (detailItem, true);
-				// navigationBar.TopItem.Title = detailItem.Title;
-				// navigationBar?
-			}
-			if (SplitViewDelegate.popoverController != null)
-				SplitViewDelegate.popoverController.Dismiss (true);
-		}
-	}
-
-	partial class DetailViewController : UINavigationController {
+	partial class DetailViewController : UIViewController {
 
 		public DetailViewController (IntPtr handle)
 			: base(handle)
 		{
+			Console.WriteLine ("# DetailViewController created: NavigationBar? {0}", NavigationBar != null);
+		}
+
+		public UINavigationBar NavigationBar {
+			get {return navigationBar;}
 		}
 
 		public override bool ShouldAutorotateToInterfaceOrientation (UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;
+		}
+
+		internal SplitViewControllerDelegate SplitViewDelegate;
+
+		UIView detailItem;
+		public void SetDetailItem (UIView detailItem, string title)
+		{
+			Console.WriteLine ("# SetDetailItem: NavigationBar? {0}", NavigationBar != null);
+			if (this.detailItem != detailItem) {
+				if (this.detailItem != null)
+					this.detailItem.RemoveFromSuperview ();
+				this.detailItem = detailItem;
+				Console.WriteLine ("# SetDetailItem: detailItem? {0}; NavigationController? {1}; ParentViewController? {2}",
+					detailItem != null, NavigationController != null, ParentViewController != null);
+				// NavigationController.PresentModalViewController (detailItem, true);
+				content.Add (detailItem);
+				NavigationBar.TopItem.Title = title;
+				// navigationBar.TopItem.Title = detailItem.Title;
+				// navigationBar?
+			}
+			if (SplitViewDelegate.PopoverController != null)
+				SplitViewDelegate.PopoverController.Dismiss (true);
 		}
 	}
 
@@ -148,20 +150,12 @@ namespace MonoCatalog.iPad
 				this.mvc = mvc;
 			}
 
-			UIView current;
-			
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				Console.WriteLine ("MonoCatalog: Row selected {0}", indexPath.Row);
 				
 				var cont = mvc.samples [indexPath.Row].Controller;
-				// mvc.detailViewController.PresentModalViewController (cont, true);
-				if (current != null)
-					current.RemoveFromSuperview ();
-				mvc.detailViewController.Add (current = cont.View);
-				// mvc.detailViewController.ParentViewController.PresentModalViewController (cont, true);
-				// mvc.contentViewController.SetDetailItem (cont);
-				// mvc.NavigationController.PushViewController (cont, true);
+				mvc.detailViewController.SetDetailItem (cont.View, cont.Title);
 			}
 		}
 		
@@ -220,12 +214,10 @@ namespace MonoCatalog.iPad
 		public override bool FinishedLaunching (UIApplication application, NSDictionary launchOptions)
 		{
 			Console.WriteLine ("# iPad SplitViewAppDelegate: finished launching!");
-			#if false
 			detailViewController.SplitViewDelegate = new SplitViewControllerDelegate () {
-				// NavigationBar = detailNavigationBar,
+				DetailViewController = detailViewController,
 			};
-			#endif
-			splitViewController.Delegate = new SplitViewControllerDelegate ();
+			splitViewController.Delegate = detailViewController.SplitViewDelegate;
 			// Add the split view controller's view to the window and display.
 			window.AddSubview (splitViewController.View);
 			window.MakeKeyAndVisible ();
@@ -236,23 +228,25 @@ namespace MonoCatalog.iPad
 
 	class SplitViewControllerDelegate : UISplitViewControllerDelegate {
 
-		internal UIPopoverController popoverController;
+		internal UIPopoverController PopoverController;
 
-		public UINavigationBar NavigationBar {get; set;}
+		public DetailViewController DetailViewController {get; set;}
 
 		public override void WillHideViewController (UISplitViewController svc, UIViewController aViewController, UIBarButtonItem barButtonItem, UIPopoverController pc)
 		{
 			Console.WriteLine ("# OnFoo...");
-			barButtonItem.Title = "Root List";
-			// NavigationBar.TopItem.SetLeftBarButtonItem (barButtonItem, true);
-			popoverController = pc;
+			barButtonItem.Title = "Demos";
+			if (DetailViewController.NavigationBar != null)
+				DetailViewController.NavigationBar.TopItem.SetLeftBarButtonItem (barButtonItem, true);
+			PopoverController = pc;
 		}
 
 		public override void WillShowViewController (UISplitViewController svc, UIViewController aViewController, UIBarButtonItem button)
 		{
 			Console.WriteLine ("# OnBar...");
-			// NavigationBar.TopItem.SetLeftBarButtonItem (null, true);
-			popoverController = null;
+			if (DetailViewController.NavigationBar != null)
+				DetailViewController.NavigationBar.TopItem.SetLeftBarButtonItem (null, true);
+			PopoverController = null;
 		}
 	}
 }

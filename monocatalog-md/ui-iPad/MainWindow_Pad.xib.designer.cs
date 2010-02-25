@@ -73,11 +73,6 @@ namespace MonoCatalog.iPad {
 		}
 	}
 	
-	// Base type probably should be MonoTouch.UIKit.UIViewController or subclass
-	[MonoTouch.Foundation.Register("DetailViewController")]
-	public partial class DetailViewController {
-	}
-	
 	// Base type probably should be MonoTouch.UIKit.UITableViewController or subclass
 	[MonoTouch.Foundation.Register("RootViewController")]
 	public partial class RootViewController {
