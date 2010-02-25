@@ -147,14 +147,18 @@ namespace MonoCatalog.iPad
 			{
 				this.mvc = mvc;
 			}
+
+			UIView current;
 			
 			public override void RowSelected (UITableView tableView, NSIndexPath indexPath)
 			{
 				Console.WriteLine ("MonoCatalog: Row selected {0}", indexPath.Row);
 				
 				var cont = mvc.samples [indexPath.Row].Controller;
-				Console.WriteLine ("# RowSel; nav-bar? {0}", mvc.detailViewController.NavigationController != null);
-				mvc.detailViewController.PresentModalViewController (cont, true);
+				// mvc.detailViewController.PresentModalViewController (cont, true);
+				if (current != null)
+					current.RemoveFromSuperview ();
+				mvc.detailViewController.Add (current = cont.View);
 				// mvc.detailViewController.ParentViewController.PresentModalViewController (cont, true);
 				// mvc.contentViewController.SetDetailItem (cont);
 				// mvc.NavigationController.PushViewController (cont, true);
