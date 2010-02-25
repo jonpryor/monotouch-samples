@@ -190,8 +190,6 @@ namespace MonoCatalog.iPad
 
 			TableView.Delegate = new TableDelegate (this);
 			TableView.DataSource = new DataSource (this);
-	
-			NavigationItem.BackBarButtonItem = new UIBarButtonItem () { Title = "Back" };
 		}
 
 	}
