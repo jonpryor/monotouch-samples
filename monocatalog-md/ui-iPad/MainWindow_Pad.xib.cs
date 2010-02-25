@@ -190,6 +190,9 @@ namespace MonoCatalog.iPad
 
 			TableView.Delegate = new TableDelegate (this);
 			TableView.DataSource = new DataSource (this);
+
+			var defaultItem = samples [0].Controller;
+			detailViewController.SetDetailItem (defaultItem.View, defaultItem.Title);
 		}
 
 	}
