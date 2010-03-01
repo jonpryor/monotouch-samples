@@ -5,7 +5,7 @@ using System;
 using MonoTouch.UIKit;
 using MonoTouch.Foundation;
 
-namespace MonoCatalog.iPhone {
+namespace MonoCatalog {
 	
 	public partial class ImagesViewController : UIViewController {
 	

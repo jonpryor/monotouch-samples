@@ -6,7 +6,7 @@ using MonoTouch.UIKit;
 using System.Drawing;
 using System;
 
-namespace MonoCatalog.iPhone {
+namespace MonoCatalog {
 	
 	public partial class PickerViewController : UIViewController  {
 		UIPickerView myPickerView, customPickerView;

@@ -9,7 +9,7 @@ using System.Drawing;
 
 using MonoCatalog;
 
-namespace MonoCatalog.iPhone {
+namespace MonoCatalog {
 	
 	public partial class AlertsViewController : UITableViewController {
 	

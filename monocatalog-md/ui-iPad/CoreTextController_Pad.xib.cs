@@ -9,7 +9,7 @@ using MonoTouch.CoreText;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MonoCatalog.iPad {
+namespace MonoCatalog {
 
 	public partial class CoreTextController_Pad : UITableViewController
 	{

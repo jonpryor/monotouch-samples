@@ -7,7 +7,7 @@ using Mono.Data.Sqlite;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MonoCatalog.iPhone
+namespace MonoCatalog
 {
 	public partial class MonoDataSqliteController : UITableViewController
 	{

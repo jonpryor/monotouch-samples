@@ -5,7 +5,7 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using System.Drawing;
 
-namespace MonoCatalog.iPhone {
+namespace MonoCatalog {
 	
 	public partial class SearchBarController : UIViewController {
 		UISearchBar bar;

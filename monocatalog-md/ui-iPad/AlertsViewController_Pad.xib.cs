@@ -3,7 +3,7 @@ using MonoCatalog;
 
 using MonoTouch.UIKit;
 
-namespace MonoCatalog.iPad {
+namespace MonoCatalog {
 
 	partial class AlertsViewController_Pad : UITableViewController {
 

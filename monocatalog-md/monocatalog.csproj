@@ -64,9 +64,130 @@
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
     <Reference Include="System.Data" />
+    <Reference Include="Mono.Data.Sqlite" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Main.cs" />
+    <Compile Include="core\CoreTextDemo.cs" />
+    <Compile Include="core\AlertsViewDemo.cs" />
+    <Compile Include="ui-iPad\CoreTextController_Pad.xib.cs">
+      <DependentUpon>ui-iPad\CoreTextController_Pad.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPad\CoreTextController_Pad.xib.designer.cs">
+      <DependentUpon>ui-iPad\CoreTextController_Pad.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPad\MainWindow_Pad.xib.cs">
+      <DependentUpon>ui-iPad\MainWindow_Pad.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPad\MainWindow_Pad.xib.designer.cs">
+      <DependentUpon>ui-iPad\MainWindow_Pad.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPad\DetailView.xib.designer.cs">
+      <DependentUpon>ui-iPad\DetailView.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPad\AlertsViewController_Pad.xib.cs">
+      <DependentUpon>ui-iPad\AlertsViewController_Pad.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPad\AlertsViewController_Pad.xib.designer.cs">
+      <DependentUpon>ui-iPad\AlertsViewController_Pad.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\MainWindow.xib.designer.cs">
+      <DependentUpon>ui-iPhone\MainWindow.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\AlertsViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\AlertsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\AlertsViewController.xib.cs">
+      <DependentUpon>ui-iPhone\AlertsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\ButtonsViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\ButtonsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\ButtonsViewController.xib.cs">
+      <DependentUpon>ui-iPhone\ButtonsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\ControlsViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\ControlsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\ControlsViewController.xib.cs">
+      <DependentUpon>ui-iPhone\ControlsViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\ImagesViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\ImagesViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\ImagesViewController.xib.cs">
+      <DependentUpon>ui-iPhone\ImagesViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\SegmentViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\SegmentViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\SegmentViewController.xib.cs">
+      <DependentUpon>ui-iPhone\SegmentViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\TextFieldController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\TextFieldController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\TextFieldController.xib.cs">
+      <DependentUpon>ui-iPhone\TextFieldController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\TextViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\TextViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\TextViewController.xib.cs">
+      <DependentUpon>ui-iPhone\TextViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\ToolbarViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\ToolbarViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\ToolbarViewController.xib.cs">
+      <DependentUpon>ui-iPhone\ToolbarViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\TransitionViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\TransitionViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\TransitionViewController.xib.cs">
+      <DependentUpon>ui-iPhone\TransitionViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\WebViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\WebViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\WebViewController.xib.cs">
+      <DependentUpon>ui-iPhone\WebViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\MainWindow.xib.cs">
+      <DependentUpon>ui-iPhone\MainWindow.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\PickerViewController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\PickerViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\PickerViewController.xib.cs">
+      <DependentUpon>ui-iPhone\PickerViewController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\SearchBarController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\SearchBarController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\SearchBarController.xib.cs">
+      <DependentUpon>ui-iPhone\SearchBarController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\PickerCustomModel.cs" />
+    <Compile Include="ui-iPhone\AddressBookController.xib.cs">
+      <DependentUpon>ui-iPhone\AddressBookController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\AddressBookController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\AddressBookController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\MonoDataSqlite.xib.cs">
+      <DependentUpon>ui-iPhone\MonoDataSqlite.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\MonoDataSqlite.xib.designer.cs">
+      <DependentUpon>ui-iPhone\MonoDataSqlite.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\CoreTextController.xib.cs">
+      <DependentUpon>ui-iPhone\CoreTextController.xib</DependentUpon>
+    </Compile>
+    <Compile Include="ui-iPhone\CoreTextController.xib.designer.cs">
+      <DependentUpon>ui-iPhone\CoreTextController.xib</DependentUpon>
+    </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
@@ -105,17 +226,25 @@
     <None Include="Info.plist" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="core\monocatalog-core.csproj">
-      <Project>{BAC82CEB-9D7B-462F-9A49-58D8ACCE0840}</Project>
-      <Name>monocatalog-core</Name>
-    </ProjectReference>
-    <ProjectReference Include="ui-iPad\monocatalog-ui-iPad.csproj">
-      <Project>{8E8D89B5-EEA2-4A28-81A9-E9DF0DD58A01}</Project>
-      <Name>monocatalog-ui-iPad</Name>
-    </ProjectReference>
-    <ProjectReference Include="ui-iPhone\monocatalog-ui-iPhone.csproj">
-      <Project>{E3CE49AE-4927-410F-97D4-1EDC3C31224C}</Project>
-      <Name>monocatalog-ui-iPhone</Name>
-    </ProjectReference>
+    <Page Include="ui-iPad\AlertsViewController_Pad.xib" />
+    <Page Include="ui-iPad\CoreTextController_Pad.xib" />
+    <Page Include="ui-iPad\DetailView.xib" />
+    <Page Include="ui-iPad\MainWindow_Pad.xib" />
+    <Page Include="ui-iPhone\AddressBookController.xib" />
+    <Page Include="ui-iPhone\AlertsViewController.xib" />
+    <Page Include="ui-iPhone\ButtonsViewController.xib" />
+    <Page Include="ui-iPhone\ControlsViewController.xib" />
+    <Page Include="ui-iPhone\CoreTextController.xib" />
+    <Page Include="ui-iPhone\ImagesViewController.xib" />
+    <Page Include="ui-iPhone\MainWindow.xib" />
+    <Page Include="ui-iPhone\MonoDataSqlite.xib" />
+    <Page Include="ui-iPhone\PickerViewController.xib" />
+    <Page Include="ui-iPhone\SearchBarController.xib" />
+    <Page Include="ui-iPhone\SegmentViewController.xib" />
+    <Page Include="ui-iPhone\TextFieldController.xib" />
+    <Page Include="ui-iPhone\TextViewController.xib" />
+    <Page Include="ui-iPhone\ToolbarViewController.xib" />
+    <Page Include="ui-iPhone\TransitionViewController.xib" />
+    <Page Include="ui-iPhone\WebViewController.xib" />
   </ItemGroup>
 </Project>

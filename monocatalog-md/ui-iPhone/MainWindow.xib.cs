@@ -14,7 +14,7 @@ using MonoTouch.CoreGraphics;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MonoCatalog.iPhone {
+namespace MonoCatalog {
 	
 	//
 	// MainViewController: this class is instantiated by MonoTouch

@@ -7,7 +7,7 @@ using MonoTouch.UIKit;
 using MonoTouch.Foundation;
 using System.Drawing;
 
-namespace MonoCatalog.iPhone
+namespace MonoCatalog
 {
 
 

@@ -6,7 +6,7 @@ using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MonoCatalog.iPad
+namespace MonoCatalog
 {
 	public partial class MainWindow_Pad : UIViewController
 	{

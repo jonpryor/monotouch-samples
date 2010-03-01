@@ -6,7 +6,7 @@ using MonoTouch.UIKit;
 using System;
 using System.Drawing;
 
-namespace MonoCatalog.iPhone {
+namespace MonoCatalog {
 	
 	public partial class ToolbarViewController : UIViewController {
 	

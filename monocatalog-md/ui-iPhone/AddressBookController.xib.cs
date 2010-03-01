@@ -6,7 +6,7 @@ using MonoTouch.AddressBookUI;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 
-namespace MonoCatalog.iPhone
+namespace MonoCatalog
 {
 	public partial class AddressBookController : UIViewController
 	{
